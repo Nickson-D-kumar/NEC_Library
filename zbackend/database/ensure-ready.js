@@ -665,6 +665,9 @@ async function ensureReservationStatusEnum(connection, dbName) {
     await connection.query(
       "ALTER TABLE reservations MODIFY COLUMN status ENUM('active','ready','on_hold_shelf','fulfilled','cancelled','expired') DEFAULT 'active'"
     );
+    await connection.query(
+      "ALTER TABLE reservations MODIFY COLUMN reservation_date DATE NOT NULL DEFAULT (CURRENT_DATE)"
+    ).catch(() => {});
   } catch (err) {
     // Ignore if already applied or error occurs
   }

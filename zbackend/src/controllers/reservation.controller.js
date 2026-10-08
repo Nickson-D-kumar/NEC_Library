@@ -159,9 +159,9 @@ class ReservationController {
             // Create reservation
             const [result] = await connection.execute(`
                 INSERT INTO reservations (
-                    user_id, book_id, status, scheduled_date, 
+                    user_id, book_id, reservation_date, status, scheduled_date, 
                     expiry_date, queue_position
-                ) VALUES (?, ?, ?, ?, ?, ?)
+                ) VALUES (?, ?, CURDATE(), ?, ?, ?, ?)
             `, [
                 userId, book_id, status, scheduledDate, 
                 expiryDate, position
@@ -202,7 +202,7 @@ class ReservationController {
 
         } catch (error) {
             console.error('Error creating reservation:', error);
-            res.status(500).json({ error: 'Internal server error' });
+            res.status(500).json({ success: false, message: error.message || 'Internal server error', error: error.message });
         }
     }
 
